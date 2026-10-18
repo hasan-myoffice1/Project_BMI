@@ -1,16 +1,18 @@
-import { Home, ChevronDown } from 'lucide-react';
+import { ChevronDown } from 'lucide-react';
 import { LANGUAGES, LangContext, useT } from '../i18n.jsx';
 import { useContext } from 'react';
+import BrandLogo from './BrandLogo.jsx';
 
 export function LanguageSelect({ variant = 'header' }) {
   const { lang, setLang } = useContext(LangContext);
   const isHeader = variant === 'header';
+
   return (
     <div
       className={
         isHeader
-          ? 'relative rounded-full bg-white px-4 py-2 shadow-soft'
-          : 'relative inline-flex items-center rounded-lg px-2 py-1'
+          ? 'relative rounded-full bg-white px-3 py-2 shadow-soft'
+          : 'relative inline-flex items-center rounded-lg border border-slate-200 bg-field px-2 py-1'
       }
     >
       <label htmlFor={`lang-${variant}`} className="sr-only">
@@ -20,8 +22,9 @@ export function LanguageSelect({ variant = 'header' }) {
         id={`lang-${variant}`}
         value={lang}
         onChange={(e) => setLang(e.target.value)}
-        className={`appearance-none bg-transparent pr-5 font-medium outline-none ${
-          isHeader ? 'font-display text-md' : 'text-md font-semibold'
+        aria-label="Select language"
+        className={`cursor-pointer appearance-none bg-transparent pr-5 text-ink outline-none ${
+          isHeader ? 'font-display text-md font-medium' : 'text-md font-semibold'
         }`}
       >
         {LANGUAGES.map((l) => (
@@ -32,8 +35,8 @@ export function LanguageSelect({ variant = 'header' }) {
       </select>
       <ChevronDown
         aria-hidden="true"
-        className="pointer-events-none absolute right-2 h-3.5 w-3.5"
-        style={isHeader ? { right: '1rem' } : undefined}
+        className="pointer-events-none absolute right-2  text-slate-600 top-2.5"
+        style={isHeader ? { right: '0.9rem' } : undefined}
       />
     </div>
   );
@@ -42,24 +45,18 @@ export function LanguageSelect({ variant = 'header' }) {
 export default function Header() {
   const t = useT();
   const links = [
-    { href: '#about', label: t('about') },
+    { href: '#about-page', label: t('about') },
     { href: '#tools', label: t('services') },
     { href: '#all-blogs', label: t('blog') },
-    { href: '#trend', label: t('history') },
+    { href: '#history-page', label: t('history') },
   ];
 
   return (
-    <header className="mx-auto flex w-full max-w-[1100px] flex-wrap items-center gap-3 px-4 pt-10 sm:px-6">
-      <a
-        href="#top"
-        aria-label="Home"
-        className="flex h-10 w-10 items-center justify-center rounded-full bg-white shadow-soft"
-      >
-        <Home className="h-4 w-4" />
-      </a>
+    <header className="mx-auto grid w-full max-w-[1100px] grid-cols-[1fr_auto_1fr] items-center gap-3 px-4 pt-10 sm:px-6">
+      <BrandLogo className="col-start-1 row-start-1" />
       <nav
         aria-label="Primary"
-        className="order-3 w-full overflow-hidden rounded-full bg-white px-5 py-2.5 shadow-soft sm:order-none sm:w-auto"
+        className="col-span-3 row-start-2 w-full overflow-hidden rounded-full bg-white px-5 py-2.5 shadow-soft sm:col-span-1 sm:col-start-2 sm:row-start-1 sm:w-auto"
       >
         <ul className="flex items-center justify-between gap-5 text-md font-medium sm:justify-start sm:gap-6">
           {links.map((l) => (
@@ -71,7 +68,7 @@ export default function Header() {
           ))}
         </ul>
       </nav>
-      <div className="ml-auto">
+      <div className="col-start-3 row-start-1 justify-self-end">
         <LanguageSelect />
       </div>
     </header>

@@ -11,9 +11,13 @@ export default function PersonalInfoFields({ gender, age, onGender, onAge, error
           <select
             id="gender"
             value={gender}
+            title="Select your gender. Gender does not change the BMI calculation."
             onChange={(e) => onGender(e.target.value)}
             className="field-input appearance-none pr-9"
           >
+            <option value="" disabled>
+              Select gender
+            </option>
             <option value="Female">Female</option>
             <option value="Male">Male</option>
           </select>
@@ -34,6 +38,8 @@ export default function PersonalInfoFields({ gender, age, onGender, onAge, error
           min="1"
           step="1"
           value={age}
+          placeholder="Enter age"
+          title="Enter your age in whole years. The BMI ranges shown are intended for adults."
           onChange={(e) => onAge(e.target.value)}
           aria-invalid={!!error}
           aria-describedby={error ? 'age-error' : undefined}

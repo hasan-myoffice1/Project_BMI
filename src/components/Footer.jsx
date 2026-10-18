@@ -1,4 +1,5 @@
 import { Facebook, Youtube, Instagram } from 'lucide-react';
+import BrandLogo from './BrandLogo.jsx';
 
 const XIcon = (props) => (
   <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" {...props}>
@@ -14,13 +15,13 @@ const socials = [
 ];
 
 const company = [
-  { label: 'About Us', href: '#about' },
+  { label: 'About Us', href: '#about-page' },
   { label: 'Contact Us', href: '#contact' },
-  { label: 'Trust, Safety & Security', href: '#legal' },
+  { label: 'Trust, Safety & Security', href: '#trust-safety-security' },
 ];
 const legal = [
-  { label: 'Terms of Services', href: '#legal' },
-  { label: 'Privacy Policies', href: '#legal' },
+  { label: 'Terms of Services', href: '#terms-of-services' },
+  { label: 'Privacy Policies', href: '#privacy-policies' },
   { label: 'Cookies', href: '#legal' },
 ];
 
@@ -32,8 +33,9 @@ export default function Footer() {
       <div className="mx-auto w-full max-w-[1100px] px-6 pt-20 sm:px-10">
         <div className="grid gap-10 md:grid-cols-2">
           <div id="contact" className="max-w-[260px]">
-            <p className="text-[14px] leading-snug text-slate-200/90">
-              MyBMI offers simple, free tools for understanding body mass index and building healthy
+            <BrandLogo />
+            <p className="mt-4 text-[14px] leading-snug text-slate-200/90">
+              myBMI Result offers simple, free tools for understanding body mass index and building healthy
               habits. Information on this site is general and is not medical advice.
             </p>
             <h2 className="mt-6  font-semibold">Contact</h2>
@@ -78,14 +80,14 @@ export default function Footer() {
                   </li>
                 ))}
               </ul>
-              <p className="mt-3 text-[14px] text-slate-200/70">Full legal pages are coming soon.</p>
+              <p className="mt-3 text-[14px] text-slate-200/70">Cookie information is coming soon.</p>
             </nav>
           </div>
         </div>
 
         <hr className="mt-14 border-white/20" />
-        <p className="py-6 text-center text-[11px] text-slate-100/90">
-          © 2026 MyBMI. Not medical advice.
+        <p className="py-6 text-center text-sm text-slate-100/90">
+          © 2026 myBMI Result. Not medical advice.
         </p>
       </div>
     </footer>

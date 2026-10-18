@@ -1,7 +1,7 @@
 import { LanguageSelect } from './Header.jsx';
 import { useT } from '../i18n.jsx';
 
-const body = 'text-[13px] leading-7 text-slate-800 font-serif';
+const body = 'text-[16px] leading-7 text-slate-800 font-sans';
 
 export default function AboutSection() {
   const t = useT();

@@ -20,6 +20,11 @@ export default function UnitSelector({ unit, onChange }) {
             type="button"
             role="radio"
             aria-checked={active}
+            title={
+              o.value === 'metric'
+                ? 'Use centimeters for height and kilograms for weight.'
+                : 'Use feet and inches for height and pounds for weight.'
+            }
             onClick={() => onChange(o.value)}
             className={`rounded-lg py-2.5 text-sm font-medium transition-colors ${
               active ? 'bg-white text-brand shadow-soft' : 'text-muted hover:text-ink'

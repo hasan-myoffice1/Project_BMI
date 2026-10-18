@@ -13,8 +13,8 @@ export default {
         slate: { footer: '#64758E' },
       },
       fontFamily: {
-        sans: ['Inter', 'ui-sans-serif', 'system-ui', 'sans-serif'],
-        display: ['"Space Grotesk"', 'Inter', 'ui-sans-serif', 'sans-serif'],
+        sans: ['"Open Sans"', 'Inter', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+        display: ['"Space Grotesk"', '"Open Sans"', 'Inter', 'ui-sans-serif', 'sans-serif'],
       },
       boxShadow: {
         soft: '0 2px 10px rgba(32, 33, 36, 0.06)',

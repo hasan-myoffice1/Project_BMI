@@ -3,7 +3,7 @@ import UnitSelector from './UnitSelector.jsx';
 import PersonalInfoFields from './PersonalInfoFields.jsx';
 import { useT } from '../i18n.jsx';
 
-function UnitInput({ id, label, value, onChange, unit, error, step = 'any' }) {
+function UnitInput({ id, label, value, onChange, unit, error, placeholder, step = 'any' }) {
   return (
     <div className="flex-1">
       <label htmlFor={id} className="field-label">
@@ -17,6 +17,12 @@ function UnitInput({ id, label, value, onChange, unit, error, step = 'any' }) {
           min="0"
           step={step}
           value={value}
+          placeholder={placeholder}
+          title={
+            id.startsWith('height')
+              ? `Enter your height in ${unit}. This measurement is used to calculate BMI.`
+              : `Enter your weight in ${unit}. This measurement is used to calculate BMI.`
+          }
           onChange={(e) => onChange(e.target.value)}
           aria-invalid={!!error}
           aria-describedby={error ? `${id}-error` : undefined}
@@ -71,6 +77,7 @@ export default function BMICalculator({ form, setField, setUnit, errors, onCalcu
                   onChange={(v) => setField('heightFt', v)}
                   unit="ft"
                   error={errors.height}
+                  placeholder="e.g. 5"
                 />
                 <UnitInput
                   id="height-in"
@@ -79,6 +86,7 @@ export default function BMICalculator({ form, setField, setUnit, errors, onCalcu
                   onChange={(v) => setField('heightIn', v)}
                   unit="in"
                   error={errors.height}
+                  placeholder="e.g. 8"
                 />
               </>
             ) : (
@@ -89,6 +97,7 @@ export default function BMICalculator({ form, setField, setUnit, errors, onCalcu
                 onChange={(v) => setField('heightCm', v)}
                 unit="cm"
                 error={errors.height}
+                placeholder="e.g. 170"
               />
             )}
           </div>
@@ -111,6 +120,7 @@ export default function BMICalculator({ form, setField, setUnit, errors, onCalcu
             onChange={(v) => setField('weight', v)}
             unit={imperial ? 'lbs' : 'kg'}
             error={errors.weight}
+            placeholder={imperial ? 'e.g. 150' : 'e.g. 60'}
           />
           {errors.weight && (
             <p id="weight-error" role="alert" className="mt-1.5  text-red-600">
@@ -124,12 +134,14 @@ export default function BMICalculator({ form, setField, setUnit, errors, onCalcu
             type="button"
             onClick={onReset}
             aria-label="Reset calculator"
+            title="Clear your entries and the current BMI result."
             className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-field text-muted hover:text-ink"
           >
             <RotateCcw className="h-4 w-4" />
           </button>
           <button
             type="submit"
+            title="Calculate your BMI from your height and weight."
             className="h-11 flex-1 rounded-xl bg-brand  font-semibold text-white shadow-[0_6px_14px_rgba(7,139,203,0.3)] transition hover:brightness-110"
           >
             {t('calculate')}

@@ -14,19 +14,66 @@ import HowToUseThisToolsSection from './components/HowToUseThisToolsSection.jsx'
 import BlogSection from './components/BlogSection.jsx';
 import AllBlogsPage from './components/AllBlogsPage.jsx';
 import SingleBlogPage from './components/SingleBlogPage.jsx';
+import AboutPage from './components/AboutPage.jsx';
+import HistoryPage from './components/HistoryPage.jsx';
+import TermsOfServicesPage from './components/TermsOfServicesPage.jsx';
+import PrivacyPoliciesPage from './components/PrivacyPoliciesPage.jsx';
+import TrustSafetySecurityPage from './components/TrustSafetySecurityPage.jsx';
 import Footer from './components/Footer.jsx';
 import useLocalStorage from './hooks/useLocalStorage.js';
 import { LangContext, useT } from './i18n.jsx';
 import { calcBMI, cmToFtIn, ftInToCm, getCategory, kgToLbs, lbsToKg, round, validate } from './utils/bmi.js';
+import { getBlogBySlug } from './data/blogPosts.js';
+
+const PAGE_METADATA = {
+  home: {
+    title: 'myBMI Result - BMI Calculator',
+    description: 'Calculate your BMI using metric or imperial units. View your BMI category, track previous results, and explore general health and wellness information.',
+  },
+  'all-blogs': {
+    title: 'Health and Wellness Blog | myBMI Result',
+    description: 'Explore health, nutrition, movement, and wellness articles from myBMI Result.',
+  },
+  about: {
+    title: 'About | myBMI Result',
+    description: 'Learn about myBMI Result and the tools available for understanding BMI and general health information.',
+  },
+  history: {
+    title: 'BMI History | myBMI Result',
+    description: 'Review saved BMI results and track changes over time with myBMI Result.',
+  },
+  'terms-of-services': {
+    title: 'Terms of Service | myBMI Result',
+    description: 'Read the terms for using the myBMI Result BMI calculator, converters, and educational content.',
+  },
+  'privacy-policies': {
+    title: 'Privacy Policy | myBMI Result',
+    description: 'Learn how myBMI Result handles locally stored BMI history and information you choose to share.',
+  },
+  'trust-safety-security': {
+    title: 'Trust, Safety & Security | myBMI Result',
+    description: 'Learn about myBMI Result’s approach to responsible health information, privacy, and safe use.',
+  },
+};
+
+function SiteFrame({ children }) {
+  return (
+    <div className="min-h-screen bg-slate-50">
+      <Header />
+      {children}
+      <Footer />
+    </div>
+  );
+}
 
 const DEFAULT_FORM = {
   unit: 'metric',
-  gender: 'Female',
-  age: '25',
-  heightCm: '165',
+  gender: '',
+  age: '',
+  heightCm: '',
   heightFt: '',
   heightIn: '',
-  weight: '60',
+  weight: '',
 };
 
 const MAX_RECORDS = 100;
@@ -102,16 +149,16 @@ function Page() {
       date: new Date().toISOString(),
     };
     setHistory((h) => [...h, record].slice(-MAX_RECORDS));
+
+    window.requestAnimationFrame(() => {
+      document.getElementById('health-status')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
   };
 
   const reset = () => {
     setForm({
       ...DEFAULT_FORM,
-      age: '',
-      heightCm: '',
-      weight: '',
       unit: form.unit,
-      gender: DEFAULT_FORM.gender,
     });
     setErrors({});
     setResult(null);
@@ -141,7 +188,7 @@ function Page() {
             <KgToLbsConverter />
             <a
               href="#tools"
-              className="flex items-center justify-center gap-3 rounded-full bg-white/60 py-3 text-xs font-semibold shadow-soft transition hover:bg-white"
+              className="flex items-center justify-center gap-3 rounded-full bg-white/60 py-3 text-sm font-semibold shadow-soft transition hover:bg-white"
             >
               {t('moreTools')}
               <ArrowRight aria-hidden="true" className="h-4 w-4" />
@@ -180,7 +227,7 @@ function Page() {
         <div className=" mt-20">
           <AboutSection />
         </div>
-        
+
         <div className="mt-20 mb-24">
           <BlogSection />
         </div>
@@ -204,6 +251,26 @@ const getBlogRoute = (hash = window.location.hash) => {
     return { page: 'all-blogs' };
   }
 
+  if (hash === '#about-page') {
+    return { page: 'about' };
+  }
+
+  if (hash === '#history-page') {
+    return { page: 'history' };
+  }
+
+  if (hash === '#terms-of-services') {
+    return { page: 'terms-of-services' };
+  }
+
+  if (hash === '#privacy-policies') {
+    return { page: 'privacy-policies' };
+  }
+
+  if (hash === '#trust-safety-security') {
+    return { page: 'trust-safety-security' };
+  }
+
   return { page: 'home' };
 };
 
@@ -217,6 +284,24 @@ export default function App() {
   }, [lang]);
 
   useEffect(() => {
+    const article = route.page === 'single-blog' ? getBlogBySlug(route.slug) : null;
+    const metadata =
+      route.page === 'single-blog'
+        ? {
+            title: `${article?.title ?? 'Health Article'} | myBMI Result`,
+            description:
+              article?.summary ??
+              'Read health and wellness information from myBMI Result.',
+          }
+        : PAGE_METADATA[route.page] ?? PAGE_METADATA.home;
+
+    document.title = metadata.title;
+    document.querySelector('meta[name="description"]').setAttribute('content', metadata.description);
+    document.querySelector('meta[property="og:title"]').setAttribute('content', metadata.title);
+    document.querySelector('meta[property="og:description"]').setAttribute('content', metadata.description);
+  }, [route]);
+
+  useEffect(() => {
     const handleHashChange = () => {
       setRoute(getBlogRoute());
     };
@@ -225,32 +310,104 @@ export default function App() {
     return () => window.removeEventListener('hashchange', handleHashChange);
   }, []);
 
+  useEffect(() => {
+    if (route.page !== 'home') return;
+
+    const targetId = decodeURIComponent(window.location.hash.slice(1));
+    if (!targetId) return;
+
+    const frame = window.requestAnimationFrame(() => {
+      document.getElementById(targetId)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+
+    return () => window.cancelAnimationFrame(frame);
+  }, [route]);
+
+  const withSiteFrame = (page) => (
+    <LangContext.Provider value={value}>
+      <SiteFrame>{page}</SiteFrame>
+    </LangContext.Provider>
+  );
+
   if (route.page === 'all-blogs') {
-    return (
-      <LangContext.Provider value={value}>
-        <AllBlogsPage onBack={() => {
+    return withSiteFrame(
+      <AllBlogsPage
+        onBack={() => {
           window.location.hash = '#top';
           setRoute({ page: 'home' });
-        }} />
-      </LangContext.Provider>
+        }}
+      />,
     );
   }
 
   if (route.page === 'single-blog') {
-    return (
-      <LangContext.Provider value={value}>
-        <SingleBlogPage
-          slug={route.slug}
-          onBack={() => {
-            window.location.hash = '#all-blogs';
-            setRoute({ page: 'all-blogs' });
-          }}
-          onBrowseAll={() => {
-            window.location.hash = '#all-blogs';
-            setRoute({ page: 'all-blogs' });
-          }}
-        />
-      </LangContext.Provider>
+    return withSiteFrame(
+      <SingleBlogPage
+        slug={route.slug}
+        onBack={() => {
+          window.location.hash = '#all-blogs';
+          setRoute({ page: 'all-blogs' });
+        }}
+        onBrowseAll={() => {
+          window.location.hash = '#all-blogs';
+          setRoute({ page: 'all-blogs' });
+        }}
+      />,
+    );
+  }
+
+  if (route.page === 'about') {
+    return withSiteFrame(
+      <AboutPage
+        onBack={() => {
+          window.location.hash = '#top';
+          setRoute({ page: 'home' });
+        }}
+      />,
+    );
+  }
+
+  if (route.page === 'history') {
+    return withSiteFrame(
+      <HistoryPage
+        onBack={() => {
+          window.location.hash = '#top';
+          setRoute({ page: 'home' });
+        }}
+      />,
+    );
+  }
+
+  if (route.page === 'terms-of-services') {
+    return withSiteFrame(
+      <TermsOfServicesPage
+        onBack={() => {
+          window.location.hash = '#top';
+          setRoute({ page: 'home' });
+        }}
+      />,
+    );
+  }
+
+  if (route.page === 'privacy-policies') {
+    return withSiteFrame(
+      <PrivacyPoliciesPage
+        onBack={() => {
+          window.location.hash = '#top';
+          setRoute({ page: 'home' });
+        }}
+      />,
+    );
+  }
+
+  if (route.page === 'trust-safety-security') {
+    return withSiteFrame(
+      <TrustSafetySecurityPage
+        onBack={() => {
+          window.location.hash = '#top';
+          setRoute({ page: 'home' });
+        }}
+      />,
     );
   }
 

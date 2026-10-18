@@ -27,6 +27,8 @@ export default function KgToLbsConverter() {
             step="any"
             inputMode="decimal"
             value={kg}
+            placeholder="Enter kg"
+            title="Enter a weight in kilograms to convert it to pounds."
             onChange={(e) => setKg(e.target.value)}
             className="field-input !bg-white"
           />
@@ -35,6 +37,7 @@ export default function KgToLbsConverter() {
           <span className="field-label">Pounds</span>
           <output
             aria-live="polite"
+            title="Equivalent weight in pounds."
             className="flex h-[46px] items-center rounded-xl bg-white px-3.5 font-semibold text-brand"
           >
             {valid ? round(kgToLbs(n), 2) : '—'}

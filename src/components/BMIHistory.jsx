@@ -73,7 +73,7 @@ export default function BMIHistory({ history, onDelete, onClear }) {
                       <td className="py-2.5">{formatDateLong(r.date)}</td>
                       <td className="py-2.5 font-semibold">{round(r.bmi, 2)}</td>
                       <td className="py-2.5">
-                        <span className={`rounded-md px-2 py-0.5 text-[12px] font-bold uppercase ${cat.badge}`}>
+                        <span className={`rounded-md px-2 py-0.5 text-sm font-bold uppercase ${cat.badge}`}>
                           {cat.label}
                         </span>
                       </td>

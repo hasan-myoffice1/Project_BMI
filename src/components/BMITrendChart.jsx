@@ -53,7 +53,7 @@ export default function BMITrendChart({ history, onToggleHistory, historyOpen })
                     tickFormatter={(id) => formatDate(dateById[id])}
                     axisLine={false}
                     tickLine={false}
-                    tick={{ fill: '#9AA8BA', fontSize: 13 }}
+                    tick={{ fill: '#9AA8BA', fontSize: 14 }}
                     padding={{ left: 24, right: 24 }}
                   />
                   <YAxis
@@ -62,7 +62,7 @@ export default function BMITrendChart({ history, onToggleHistory, historyOpen })
                     axisLine={false}
                     tickLine={false}
                     width={48}
-                    tick={{ fill: '#9AA8BA', fontSize: 13 }}
+                    tick={{ fill: '#9AA8BA', fontSize: 14 }}
                     tickFormatter={(v) => round(v, 2)}
                   />
                   <Tooltip
@@ -85,17 +85,19 @@ export default function BMITrendChart({ history, onToggleHistory, historyOpen })
           )}
         </div>
       </div>
-      <div className="mt-4 text-center">
-        <button
-          type="button"
-          onClick={onToggleHistory}
-          aria-expanded={historyOpen}
-          aria-controls="history-panel"
-          className="font-semibold hover:text-brand"
-        >
-          {t('viewHistory')}
-        </button>
-      </div>
+      {onToggleHistory && (
+        <div className="mt-4 text-center">
+          <button
+            type="button"
+            onClick={onToggleHistory}
+            aria-expanded={historyOpen}
+            aria-controls="history-panel"
+            className="font-semibold hover:text-brand"
+          >
+            {t('viewHistory')}
+          </button>
+        </div>
+      )}
     </section>
   );
 }
